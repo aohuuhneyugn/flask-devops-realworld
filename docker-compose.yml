@@ -1,1 +1,10 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5000:5000"
+    image: flask-devops-realworld
+    container_name: flask-devops-realworld
 
