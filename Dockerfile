@@ -1,14 +1,10 @@
-# Sử dụng image Python chính thức
 FROM python:3.10-slim
 
-# Tạo thư mục app
 WORKDIR /app
 
-# Copy toàn bộ vào container
-COPY app.py ./app.py
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# Cài Flask
-RUN pip install flask
+COPY . .
 
-# Chạy ứng dụng
-CMD ["python", "app/app.py"]
+CMD ["python", "app.py"]
