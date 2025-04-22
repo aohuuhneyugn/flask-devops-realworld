@@ -1,9 +1,10 @@
-FROM python:3.10-slim
+from flask import Flask
 
-WORKDIR /app
+app = Flask(__name__)
 
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+@app.route('/')
+def hello():
+    return "Hello from DevOps Realworld!"
 
-COPY app/ ./app
-CMD ["python", "app/app.py"]
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
