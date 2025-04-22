@@ -5,7 +5,7 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Copy toàn bộ vào container
-COPY app/ ./app
+COPY app.py ./app.py
 
 # Cài Flask
 RUN pip install flask
