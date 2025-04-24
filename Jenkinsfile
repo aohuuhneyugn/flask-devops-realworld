@@ -2,28 +2,34 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone code') {
+        stage('Clone') {
             steps {
-                git 'https://github.com/your-username/flask-devops-realworld.git'
+                echo 'Cloning repo...'
+                // Git đã được Jenkins clone sẵn, không cần làm gì thêm
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("flask-devops-realworld")
-                }
+                echo 'Building Docker image...'
+                sh 'docker compose build'
             }
         }
 
-        stage('Push to DockerHub') {
+        stage('Run Unit Tests') {
             steps {
-                withDockerRegistry([credentialsId: 'dockerhub-creds', url: '']) {
-                    script {
-                        docker.image("flask-devops-realworld").push("latest")
-                    }
-                }
+                echo 'Running tests...'
+                sh 'docker compose run --rm flask-app pytest'
             }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ CI pipeline completed successfully!'
+        }
+        failure {
+            echo '❌ CI pipeline failed!'
         }
     }
 }
