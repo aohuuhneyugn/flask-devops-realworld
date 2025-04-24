@@ -1,35 +1,36 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = "aohuuhneyugn/flask-cicd"
+    }
+
     stages {
-        stage('Clone') {
+        stage('Clone Source') {
             steps {
-                echo 'Cloning repo...'
-                // Git đã được Jenkins clone sẵn, không cần làm gì thêm
+                git 'https://github.com/your-username/flask-cicd'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                echo 'Building Docker image...'
-                sh 'docker compose build'
+                script {
+                    sh 'docker build -t $IMAGE_NAME .'
+                }
             }
         }
 
-        stage('Run Unit Tests') {
+        stage('Push to Docker Hub') {
             steps {
-                echo 'Running tests...'
-                sh 'docker compose run --rm flask-app pytest'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    script {
+                        sh """
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker push $IMAGE_NAME
+                        """
+                    }
+                }
             }
-        }
-    }
-
-    post {
-        success {
-            echo '✅ CI pipeline completed successfully!'
-        }
-        failure {
-            echo '❌ CI pipeline failed!'
         }
     }
 }
