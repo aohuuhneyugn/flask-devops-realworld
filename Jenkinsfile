@@ -8,7 +8,8 @@ pipeline {
     stages {
         stage('Clone Source') {
             steps {
-                git 'https://github.com/your-username/flask-cicd'
+                git 'https://github.com/aohuuhneyugn/flask-devops-realworld'
+
             }
         }
 
