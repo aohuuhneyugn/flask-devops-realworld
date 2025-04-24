@@ -1,12 +1,19 @@
+<<<<<<< HEAD
 version: '3.8'
 volumes:
   - /var/run/docker.sock:/var/run/docker.sock
 
+=======
+>>>>>>> 55c3c8c6837cf12cc1fc74ac7ca381e89131e3c4
 services:
-  flask-app:
-    build: .
+  jenkins:
+    image: jenkins/jenkins:lts
     ports:
-      - "5000:5000"
-    image: flask-devops-realworld
-    container_name: flask-devops-realworld
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock  # 👈 mount docker socket vào
 
+volumes:
+  jenkins_home: {}  # 👈 đúng format: mapping rỗng, không phải list
