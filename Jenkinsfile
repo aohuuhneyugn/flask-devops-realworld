@@ -1,26 +1,34 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = "aohuuhneyugn/flask-cicd"
+    }
+
     stages {
-        stage('Clone code') {
+        stage('Clone Source') {
             steps {
-                git 'https://github.com/your-username/flask-devops-realworld.git'
+                git branch: 'main', url: 'https://github.com/aohuuhneyugn/flask-devops-realworld'
+
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("flask-devops-realworld")
+                    sh 'docker build -t $IMAGE_NAME .'
                 }
             }
         }
 
-        stage('Push to DockerHub') {
+        stage('Push to Docker Hub') {
             steps {
-                withDockerRegistry([credentialsId: 'dockerhub-creds', url: '']) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     script {
-                        docker.image("flask-devops-realworld").push("latest")
+                        sh """
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker push $IMAGE_NAME
+                        """
                     }
                 }
             }

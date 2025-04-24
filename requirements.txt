@@ -1,3 +1,2 @@
-flask
-pytest
+flask==2.1.0
 
