@@ -29,9 +29,9 @@ pipeline {
         stage('Deploy New Container') {   // <<< THÊM NÈ
             steps {
                 sh '''
-                    docker rm -f flask-app-prod || true
-                    docker pull aohuuhneyugn/flask-cicd:latest
-                    docker compose -f docker-compose.prod.yml up -d
+                        docker rm -f flask-app-prod || true
+                        docker pull aohuuhneyugn/flask-cicd:latest
+                        docker-compose -f docker-compose.prod.yml up -d
                 '''
             }
         }
