@@ -31,7 +31,7 @@ pipeline {
                 sh '''
                         docker rm -f flask-app-prod || true
                         docker pull aohuuhneyugn/flask-cicd:latest
-                        docker compose -f docker-compose.prod.yml up -d
+                        docker compose up -d -f docker-compose.prod.yml
                 '''
             }
         }
