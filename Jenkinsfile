@@ -58,21 +58,23 @@ pipeline {
 
         stage('Deploy New Container') {
             steps {
-                script {
-                    try {
+                echo 'Deploying new container...'
+                    script {
+                      try {
                         sh '''
-                        docker rm -f $CONTAINER_NAME || true
-                        docker run -d --name $CONTAINER_NAME -p 5000:5000 $DOCKER_USER/$DOCKER_IMAGE:$DOCKER_TAG
+                          docker rm -f flask-cicd || true
+                          docker run -d --name flask-cicd -p 5000:5000 aohuuhneyugn/flask-cicd:latest
                         '''
-                    } catch (Exception e) {
-                        echo '⚠️ Deploy failed! Rolling back...'
+                      } catch (err) {
+                            echo "❌ Deploy failed! Rolling back..."
                         sh '''
-                        docker rm -f $CONTAINER_NAME || true
-                        docker run -d --name $CONTAINER_NAME -p 5000:5000 $DOCKER_USER/$DOCKER_IMAGE:rollback
+                          docker rm -f flask-cicd || true
+                          docker run -d --name flask-cicd -p 5000:5000 aohuuhneyugn/flask-cicd:backup
                         '''
-                    }
+                  }
                 }
             }
         }
+
     }
 }
