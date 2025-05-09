@@ -34,13 +34,18 @@ pipeline {
         }
 
         stage('Tag Backup Image for Rollback') {
-            steps {
+          steps {
+            echo 'Tagging current image as backup: flask-cicd:backup'
                 sh '''
-                docker tag $DOCKER_USER/$DOCKER_IMAGE:$DOCKER_TAG $DOCKER_USER/$DOCKER_IMAGE:rollback
-                docker push $DOCKER_USER/$DOCKER_IMAGE:rollback
+                  if docker images | grep -q "flask-cicd"; then
+                    docker tag aohuuhneyugn/flask-cicd:latest aohuuhneyugn/flask-cicd:backup || true
+                  else
+                    echo "No image to tag, skip backup"
+                  fi
                 '''
-            }
-        }
+          }
+    }
+
 
         stage('Push to Docker Hub') {
             steps {
