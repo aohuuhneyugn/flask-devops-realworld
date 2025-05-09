@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Clone Source') {
             steps {
-                git 'https://github.com/aohuuhneyugn/flask-devops-realworld.git'
+                git branch: 'main', url: 'https://github.com/aohuuhneyugn/flask-devops-realworld.git'
             }
         }
 
